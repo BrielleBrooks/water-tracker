@@ -1,9 +1,5 @@
 :root{
-  /* solid dark background for the whole embed */
-  --bg: #191919;
-
-  /* UI colors */
-  --card: transparent;
+  --bg: #191919;  /* solid dark background */
   --accent: #00357a;
   --water: #0081cc;
   --text: #ffffff;
@@ -12,7 +8,6 @@
   --control-border: #2f2f2f;
   --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  /* sizing */
   --space: clamp(12px, 2.2vw, 24px);
   --radius: clamp(14px, 2vw, 20px);
   --btn-radius: clamp(12px, 1.8vw, 16px);
@@ -22,44 +17,34 @@
   --headline: clamp(22px, 5.3vw, 36px);
   --subtle: clamp(14px, 3.2vw, 18px);
 
-  /* keep buttons clear of Notion’s hover UI */
   --edge-pad: 18px;
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
-
-  /* rounded corners for the whole visual area */
   --embed-radius: 22px;
 }
 
-/* make the page dark and rounded (NOT transparent) */
+/* whole page background */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: var(--bg) !important; /* <- key change */
+  background: var(--bg) !important; 
   color: var(--text);
   font-family: var(--font);
-}
 
-body{
-  /* Fill the iframe and clip to rounded corners */
-  min-height: 100dvh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   border-radius: var(--embed-radius);
-  overflow: hidden;           /* clips inside to the rounded shape */
+  overflow: hidden;   /* clip to rounded corners */
 }
 
 /* -------- LAYOUT -------- */
 .widget{
-  width: 100vw;               /* full-bleed inside the frame */
+  width: 100vw;
   max-width: 100%;
   display:flex;
   justify-content:center;
 }
 
-.card{                         /* no inner “box” */
-  background: transparent;
+.card{
+  background: var(--bg); /* was transparent – now inherits dark background */
   border-radius: 0;
   box-shadow: none;
 }
@@ -150,7 +135,7 @@ body{
 }
 
 /* -------- WAVES -------- */
-#wavesGroup { transform: none; } /* JS animates */
+#wavesGroup { transform: none; }
 
 /* -------- MODAL -------- */
 .modal{
@@ -162,7 +147,7 @@ body{
   width: min(520px, 86vw);
   padding: calc(var(--space) * 1.2);
   border-radius: var(--radius);
-  background: #1c1c1c;    /* solid so it’s readable */
+  background: #1c1c1c;
 }
 .modal-header{ display:flex; align-items:center; justify-content:space-between; }
 .icon-btn{ background: transparent; border:0; color:#fff; font-size: clamp(18px, 3.6vw, 22px); cursor:pointer; }
