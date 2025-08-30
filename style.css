@@ -1,9 +1,8 @@
 :root{
-  /* Make the page transparent so it blends with Notion */
-  --bg: transparent;
+  /* Pick the exact black you want */
+  --bg: #191919;                 /* try #191919, #1f1f1f, or #121212 to match your Notion */
 
-  /* UI colors stay the same */
-  --card: transparent;
+  --card: transparent;           /* no inner card */
   --accent: #00357a;
   --water: #0081cc;
   --text: #ffffff;
@@ -26,39 +25,38 @@
   --edge-pad: 18px;
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
 
-  /* Rounded corners for the whole visual area inside the iframe */
-  --embed-radius: 22px; /* tweak this for more/less rounding */
+  /* Rounded corners for the whole embed */
+  --embed-radius: 22px;          /* tweak this for more/less rounding */
 }
 
-/* ensure the page is actually transparent in every browser */
-html, body { height: 100%; background: transparent !important; }
+/* page fills the iframe as a single rounded black card */
+html, body { height: 100%; }
 *{ box-sizing: border-box; }
 
 body{
   margin:0;
+  background: var(--bg) !important;  /* solid black background */
   color: var(--text);
   font-family: var(--font);
 
-  /* Fill the iframe and clip to rounded corners */
   min-height: 100dvh;
   display:flex;
   align-items:center;
   justify-content:center;
 
-  /* Rounded corners + clip the contents so the corners look truly rounded */
   border-radius: var(--embed-radius);
-  overflow: hidden;           /* IMPORTANT: clips inside to the rounded shape */
+  overflow: hidden;                  /* clips contents to rounded corners */
 }
 
 /* -------- LAYOUT -------- */
 .widget{
-  width: 100vw;               /* full-bleed inside the frame */
+  width: 100vw;                      /* full-bleed inside the frame */
   max-width: 100%;
   display:flex;
   justify-content:center;
 }
 
-.card{                         /* no inner “box” */
+.card{                                /* no inner box/shadow */
   background: transparent;
   border-radius: 0;
   box-shadow: none;
@@ -141,7 +139,6 @@ body{
 .primary{ background: var(--accent); }
 
 /* -------- DROPLET -------- */
-/* size stays responsive; adjust if you want larger/smaller */
 #droplet{
   display:block;
   width: min(72vmin, 88%);
@@ -151,10 +148,9 @@ body{
 }
 
 /* -------- WAVES -------- */
-#wavesGroup { transform: none; } /* JS does the motion */
+#wavesGroup { transform: none; } /* JS animates */
 
 /* -------- MODAL -------- */
-/* Modals need their own background because the page is transparent now */
 .modal{
   position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
   background: rgba(0,0,0,.45); padding: var(--space); z-index: 50;
@@ -164,7 +160,7 @@ body{
   width: min(520px, 86vw);
   padding: calc(var(--space) * 1.2);
   border-radius: var(--radius);
-  background: #1c1c1c;    /* solid so it’s readable over any Notion page */
+  background: #1c1c1c;
 }
 .modal-header{ display:flex; align-items:center; justify-content:space-between; }
 .icon-btn{ background: transparent; border:0; color:#fff; font-size: clamp(18px, 3.6vw, 22px); cursor:pointer; }
