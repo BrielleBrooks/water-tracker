@@ -4,17 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Water Tracker Widget</title>
-
-  <!-- Fallback to kill white background even if external CSS is cached -->
-  <style>
-    html,body{height:100%;margin:0;background:#191919 !important;}
-  </style>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1001" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js for the stats modal -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
-
 <body>
   <div class="widget">
     <div class="tracker card">
@@ -41,7 +35,9 @@
       <h2 id="water-amount" class="headline">0</h2>
       <p id="goal-progress" class="subtle">0% of your goal</p>
 
+      <!-- SVG droplet (with dual wave layers for seamless animation + bobbing group) -->
       <svg id="droplet" viewBox="0 0 375 375" xmlns="http://www.w3.org/2000/svg" aria-label="Water level">
+        <!-- Outline -->
         <path
           d="M 322.707031 239.828125 C 322.707031 314.550781 262.144531 375.128906 187.40625 375.128906 
              C 112.667969 375.128906 52.085938 314.550781 52.085938 239.828125 
@@ -49,6 +45,7 @@
              C 187.40625 0.0546875 322.707031 165.089844 322.707031 239.828125"
           fill="none" stroke="#0081cc" stroke-width="4"
         />
+        <!-- Clip shape -->
         <clipPath id="clipDroplet" clipPathUnits="userSpaceOnUse">
           <path
             d="M 322.707031 239.828125 C 322.707031 314.550781 262.144531 375.128906 187.40625 375.128906 
@@ -58,6 +55,7 @@
           />
         </clipPath>
 
+        <!-- Waves grouped for bobbing -->
         <g id="wavesGroup">
           <path id="wave1" fill="#0081cc" clip-path="url(#clipDroplet)"></path>
           <path id="wave2" fill="#0081cc" opacity="0.85" clip-path="url(#clipDroplet)"></path>
@@ -114,6 +112,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=1001"></script>
+  <script src="script.js"></script>
 </body>
 </html>
