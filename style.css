@@ -1,9 +1,6 @@
 :root{
-  /* Make the page transparent so it blends with Notion */
-  --bg: transparent;
-
-  /* UI colors stay the same */
-  --card: transparent;
+  --bg: #191919;
+  --card: transparent;         /* transparent so there's no inner box */
   --accent: #00357a;
   --water: #0081cc;
   --text: #ffffff;
@@ -12,7 +9,7 @@
   --control-border: #2f2f2f;
   --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  /* sizing */
+  /* layout + sizing */
   --space: clamp(12px, 2.2vw, 24px);
   --radius: clamp(14px, 2vw, 20px);
   --btn-radius: clamp(12px, 1.8vw, 16px);
@@ -22,51 +19,42 @@
   --headline: clamp(22px, 5.3vw, 36px);
   --subtle: clamp(14px, 3.2vw, 18px);
 
-  /* keep buttons clear of Notion’s hover UI */
-  --edge-pad: 18px;
+  /* keep buttons out of Notion's corner UI */
+  --edge-pad: 18px;               /* tweak if needed */
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
-
-  /* Rounded corners for the whole visual area inside the iframe */
-  --embed-radius: 22px; /* tweak this for more/less rounding */
 }
 
-/* ensure the page is actually transparent in every browser */
-html, body { height: 100%; background: transparent !important; }
 *{ box-sizing: border-box; }
-
+html, body{ height:100%; }
 body{
   margin:0;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font);
 
-  /* Fill the iframe and clip to rounded corners */
+  /* make the embed fill its iframe nicely */
   min-height: 100dvh;
   display:flex;
   align-items:center;
   justify-content:center;
-
-  /* Rounded corners + clip the contents so the corners look truly rounded */
-  border-radius: var(--embed-radius);
-  overflow: hidden;           /* IMPORTANT: clips inside to the rounded shape */
 }
 
 /* -------- LAYOUT -------- */
 .widget{
-  width: 100vw;               /* full-bleed inside the frame */
+  width: 100vw;                   /* full-bleed */
   max-width: 100%;
   display:flex;
   justify-content:center;
 }
-
-.card{                         /* no inner “box” */
+.card{
+  /* remove the inner box look completely */
   background: transparent;
   border-radius: 0;
   box-shadow: none;
 }
-
 .tracker{
   width: 100%;
-  min-height: 100dvh;
+  min-height: 100dvh;             /* fill the frame height */
   padding:
     calc(var(--edge-pad-top) + 8px)
     clamp(14px, 2.4vw, 24px)
@@ -101,7 +89,7 @@ body{
   cursor: pointer;
   display:flex; align-items:center; justify-content:center;
   transition: transform .15s ease;
-  z-index: 5;
+  z-index: 5; /* stays above wave paths */
 }
 .settings-btn:hover{ transform: translateY(-1px); }
 .settings-btn img{ filter: none; width: clamp(16px, 2.2vw, 22px); height: auto; }
@@ -141,20 +129,20 @@ body{
 .primary{ background: var(--accent); }
 
 /* -------- DROPLET -------- */
-/* size stays responsive; adjust if you want larger/smaller */
+/* make the droplet a bit larger overall but still responsive */
 #droplet{
   display:block;
-  width: min(72vmin, 88%);
+  width: min(72vmin, 88%);        /* larger than before */
   max-width: 680px;
   min-width: 160px;
   margin: clamp(10px, 2vw, 16px) auto 0;
 }
 
 /* -------- WAVES -------- */
-#wavesGroup { transform: none; } /* JS does the motion */
+/* JS handles bobbing; keep CSS neutral so there are no easing resets */
+#wavesGroup { transform: none; }
 
 /* -------- MODAL -------- */
-/* Modals need their own background because the page is transparent now */
 .modal{
   position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
   background: rgba(0,0,0,.45); padding: var(--space); z-index: 50;
@@ -164,7 +152,7 @@ body{
   width: min(520px, 86vw);
   padding: calc(var(--space) * 1.2);
   border-radius: var(--radius);
-  background: #1c1c1c;    /* solid so it’s readable over any Notion page */
+  background: #1c1c1c;           /* keep modals readable on transparent page */
 }
 .modal-header{ display:flex; align-items:center; justify-content:space-between; }
 .icon-btn{ background: transparent; border:0; color:#fff; font-size: clamp(18px, 3.6vw, 22px); cursor:pointer; }
