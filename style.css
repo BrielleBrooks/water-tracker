@@ -1,5 +1,9 @@
 :root{
-  --bg: #191919;  /* solid black background */
+  /* Solid black background */
+  --bg: #191919;
+
+  /* UI colors stay the same */
+  --card: transparent;
   --accent: #00357a;
   --water: #0081cc;
   --text: #ffffff;
@@ -8,6 +12,7 @@
   --control-border: #2f2f2f;
   --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
+  /* sizing */
   --space: clamp(12px, 2.2vw, 24px);
   --radius: clamp(14px, 2vw, 20px);
   --btn-radius: clamp(12px, 1.8vw, 16px);
@@ -17,150 +22,62 @@
   --headline: clamp(22px, 5.3vw, 36px);
   --subtle: clamp(14px, 3.2vw, 18px);
 
+  /* keep buttons clear of Notion’s hover UI */
   --edge-pad: 18px;
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
-  --embed-radius: 22px; /* rounded corners for whole widget */
+
+  /* Rounded corners */
+  --embed-radius: 22px;
 }
 
-/* ===== PAGE BASE ===== */
+/* === PAGE BASE === */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: var(--bg) !important;
+  background: var(--bg) !important; /* solid black background */
   color: var(--text);
   font-family: var(--font);
 
-  /* make the whole iframe respect rounding */
+  /* let it resize like before */
+  min-height: 100dvh;
+
+  /* rounded corners */
   border-radius: var(--embed-radius);
   overflow: hidden;
 }
 
-/* ===== MAIN LAYOUT ===== */
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+*{ box-sizing: border-box; }
 
-  /* critical for resizing inside Notion */
-  min-height: 100dvh;
+body{
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color: var(--text);
 }
 
-.widget {
-  width: 100vw;
+/* -------- LAYOUT -------- */
+.widget{
+  width: 100vw;   /* full width */
   max-width: 100%;
-  display: flex;
-  justify-content: center;
+  display:flex;
+  justify-content:center;
 }
 
-.card {
-  background: transparent; /* no inner white box */
+.card{
+  background: transparent;
   border-radius: 0;
   box-shadow: none;
 }
 
-.tracker {
+.tracker{
   width: 100%;
-  min-height: 100dvh; /* lets it resize vertically */
+  min-height: 100dvh; /* keeps resizing */
   padding:
     calc(var(--edge-pad-top) + 8px)
     clamp(14px, 2.4vw, 24px)
     clamp(24px, 4vw, 48px);
-  text-align: center;
+  text-align:center;
   position: relative;
-}
-
-/* ===== TEXT ===== */
-.headline {
-  font-weight: 700;
-  letter-spacing: .2px;
-  margin: clamp(6px, 1vw, 10px) 0 4px;
-  font-size: var(--headline);
-}
-.subtle {
-  margin: 0 0 clamp(8px, 1.2vw, 12px);
-  color: var(--muted);
-  font-weight: 500;
-  font-size: var(--subtle);
-}
-
-/* ===== BUTTONS ===== */
-.settings-btn{
-  position:absolute;
-  top: var(--edge-pad-top);
-  right: var(--edge-pad);
-  background: var(--control-bg);
-  border: 1px solid var(--control-border);
-  border-radius: var(--btn-radius);
-  padding: clamp(6px, 1vw, 8px);
-  cursor: pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition: transform .15s ease;
-  z-index: 5;
-}
-.settings-btn:hover{ transform: translateY(-1px); }
-
-.stats-btn{
-  position: absolute;
-  top: var(--edge-pad-top);
-  left: var(--edge-pad);
-  z-index: 5;
-  background: var(--control-bg);
-  border: 1px solid var(--control-border);
-  border-radius: 12px;
-  padding: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform .15s ease;
-}
-.stats-btn:hover{ transform: translateY(-1px); }
-
-.controls{
-  display:flex;
-  justify-content:center;
-  gap: clamp(10px, 2vw, 16px);
-  margin-bottom: clamp(8px, 1.2vw, 12px);
-}
-.pill-btn{
-  background: var(--accent);
-  color: #fff;
-  border: 0;
-  border-radius: var(--btn-radius);
-  padding: var(--btn-pad-y) var(--btn-pad-x);
-  cursor: pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight: 600;
-  min-width: var(--btn-size);
-  min-height: var(--btn-size);
-  transition: transform .1s ease, filter .2s ease;
-}
-.pill-btn:hover{ filter: brightness(1.1); transform: translateY(-1px); }
-
-/* ===== DROPLET ===== */
-#droplet {
-  display: block;
-  width: min(72vmin, 88%);
-  max-width: 680px;
-  min-width: 160px;
-  margin: clamp(10px, 2vw, 16px) auto 0;
-}
-
-/* ===== MODALS ===== */
-.modal{
-  position: fixed; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  background: rgba(0,0,0,.45);
-  padding: var(--space);
-  z-index: 50;
-}
-.modal.hidden{ display:none; }
-.modal-inner{
-  width: min(520px, 86vw);
-  padding: calc(var(--space) * 1.2);
-  border-radius: var(--radius);
-  background: #1c1c1c;
 }
