@@ -1,8 +1,5 @@
 :root{
-  /* Pick the exact black you want */
-  --bg: #191919;                 /* try #191919, #1f1f1f, or #121212 to match your Notion */
-
-  --card: transparent;           /* no inner card */
+  --bg: #191919;                 /* background color of your widget */
   --accent: #00357a;
   --water: #0081cc;
   --text: #ffffff;
