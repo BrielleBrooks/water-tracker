@@ -18,45 +18,40 @@
   --headline: clamp(22px, 5.3vw, 36px);
   --subtle: clamp(14px, 3.2vw, 18px);
 
-  /* keep buttons clear of Notion’s hover UI */
+  /* button spacing so they don't overlap Notion's UI */
   --edge-pad: 18px;
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
 
-  /* Rounded corners for the whole embed */
-  --embed-radius: 22px;          /* tweak this for more/less rounding */
+  /* rounded corners for the full embed */
+  --embed-radius: 22px;
 }
 
-/* page fills the iframe as a single rounded black card */
-html, body { height: 100%; }
-*{ box-sizing: border-box; }
-
-body{
-  margin:0;
-  background: var(--bg) !important;  /* solid black background */
+/* -------- FORCE FULL BLACK BACKGROUND -------- */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg) !important;  /* force black */
   color: var(--text);
   font-family: var(--font);
 
-  min-height: 100dvh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
+  /* make embed look like a rounded card */
   border-radius: var(--embed-radius);
-  overflow: hidden;                  /* clips contents to rounded corners */
+  overflow: hidden;
 }
 
 /* -------- LAYOUT -------- */
 .widget{
-  width: 100vw;                      /* full-bleed inside the frame */
+  width: 100vw;
   max-width: 100%;
   display:flex;
   justify-content:center;
 }
 
-.card{                                /* no inner box/shadow */
+.card{
   background: transparent;
   border-radius: 0;
-  box-shadow: none;
+  box-shadow: none;  /* no inner shadow */
 }
 
 .tracker{
@@ -145,7 +140,7 @@ body{
 }
 
 /* -------- WAVES -------- */
-#wavesGroup { transform: none; } /* JS animates */
+#wavesGroup { transform: none; }
 
 /* -------- MODAL -------- */
 .modal{
