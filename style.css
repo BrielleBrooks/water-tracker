@@ -1,6 +1,6 @@
 :root{
-  /* Solid black background */
-  --bg: #191919;
+  /* Make the page transparent so it blends with Notion */
+  --bg: transparent;
 
   /* UI colors stay the same */
   --card: transparent;
@@ -26,46 +26,39 @@
   --edge-pad: 18px;
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
 
-  /* Rounded corners */
-  --embed-radius: 22px;
+  /* Rounded corners for the whole visual area inside the iframe */
+  --embed-radius: 22px; /* tweak this for more/less rounding */
 }
 
-/* === PAGE BASE === */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background: var(--bg) !important; /* solid black background */
-  color: var(--text);
-  font-family: var(--font);
-
-  /* let it resize like before */
-  min-height: 100dvh;
-
-  /* rounded corners */
-  border-radius: var(--embed-radius);
-  overflow: hidden;
-}
-
+/* ensure the page is actually transparent in every browser */
+html, body { height: 100%; background: transparent !important; }
 *{ box-sizing: border-box; }
 
 body{
   margin:0;
+  color: var(--text);
+  font-family: var(--font);
+
+  /* Fill the iframe and clip to rounded corners */
+  min-height: 100dvh;
   display:flex;
   align-items:center;
   justify-content:center;
-  color: var(--text);
+
+  /* Rounded corners + clip the contents so the corners look truly rounded */
+  border-radius: var(--embed-radius);
+  overflow: hidden;           /* IMPORTANT: clips inside to the rounded shape */
 }
 
 /* -------- LAYOUT -------- */
 .widget{
-  width: 100vw;   /* full width */
+  width: 100vw;               /* full-bleed inside the frame */
   max-width: 100%;
   display:flex;
   justify-content:center;
 }
 
-.card{
+.card{                         /* no inner “box” */
   background: transparent;
   border-radius: 0;
   box-shadow: none;
@@ -73,7 +66,7 @@ body{
 
 .tracker{
   width: 100%;
-  min-height: 100dvh; /* keeps resizing */
+  min-height: 100dvh;
   padding:
     calc(var(--edge-pad-top) + 8px)
     clamp(14px, 2.4vw, 24px)
@@ -81,3 +74,119 @@ body{
   text-align:center;
   position: relative;
 }
+
+/* Typography */
+.headline{
+  font-weight: 700;
+  letter-spacing: .2px;
+  margin: clamp(6px, 1vw, 10px) 0 4px;
+  font-size: var(--headline);
+}
+.subtle{
+  margin: 0 0 clamp(8px, 1.2vw, 12px);
+  color: var(--muted);
+  font-weight: 500;
+  font-size: var(--subtle);
+}
+
+/* -------- ICON / BUTTONS -------- */
+.settings-btn{
+  position:absolute;
+  top: var(--edge-pad-top);
+  right: var(--edge-pad);
+  background: var(--control-bg);
+  border: 1px solid var(--control-border);
+  border-radius: var(--btn-radius);
+  padding: clamp(6px, 1vw, 8px);
+  cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: transform .15s ease;
+  z-index: 5;
+}
+.settings-btn:hover{ transform: translateY(-1px); }
+.settings-btn img{ filter: none; width: clamp(16px, 2.2vw, 22px); height: auto; }
+
+.stats-btn{
+  position: absolute;
+  top: var(--edge-pad-top);
+  left: var(--edge-pad);
+  z-index: 5;
+  background: var(--control-bg);
+  border: 1px solid var(--control-border);
+  border-radius: 12px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .15s ease;
+}
+.stats-btn:hover{ transform: translateY(-1px); }
+.stats-btn img{ filter: none; }
+
+.controls{
+  display:flex; justify-content:center;
+  gap: clamp(10px, 2vw, 16px);
+  margin-bottom: clamp(8px, 1.2vw, 12px);
+}
+.pill-btn{
+  background: var(--accent); color: #fff; border: 0; border-radius: var(--btn-radius);
+  padding: var(--btn-pad-y) var(--btn-pad-x); cursor: pointer; display:flex; align-items:center; justify-content:center;
+  font-weight: 600; min-width: var(--btn-size); min-height: var(--btn-size);
+  transition: transform .1s ease, filter .2s ease;
+}
+.pill-btn:hover{ filter: brightness(1.1); transform: translateY(-1px); }
+.pill-btn:active{ transform: translateY(0); }
+.pill-btn img{ filter: none; width: clamp(14px, 2vw, 18px); height:auto; }
+.primary{ background: var(--accent); }
+
+/* -------- DROPLET -------- */
+/* size stays responsive; adjust if you want larger/smaller */
+#droplet{
+  display:block;
+  width: min(72vmin, 88%);
+  max-width: 680px;
+  min-width: 160px;
+  margin: clamp(10px, 2vw, 16px) auto 0;
+}
+
+/* -------- WAVES -------- */
+#wavesGroup { transform: none; } /* JS does the motion */
+
+/* -------- MODAL -------- */
+/* Modals need their own background because the page is transparent now */
+.modal{
+  position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background: rgba(0,0,0,.45); padding: var(--space); z-index: 50;
+}
+.modal.hidden{ display:none; }
+.modal-inner{
+  width: min(520px, 86vw);
+  padding: calc(var(--space) * 1.2);
+  border-radius: var(--radius);
+  background: #1c1c1c;    /* solid so it’s readable over any Notion page */
+}
+.modal-header{ display:flex; align-items:center; justify-content:space-between; }
+.icon-btn{ background: transparent; border:0; color:#fff; font-size: clamp(18px, 3.6vw, 22px); cursor:pointer; }
+
+.field{ margin: clamp(10px, 2vw, 16px) 0; }
+.field label{
+  display:block; margin-bottom: clamp(6px, 1.2vw, 8px);
+  color: var(--muted); font-weight:600; font-size: clamp(13px, 2.8vw, 16px);
+}
+input[type="number"], .select-wrap select{
+  width:100%; background: var(--control-bg); color: #fff; border: 1px solid var(--control-border);
+  border-radius: 18px; padding: clamp(10px, 1.8vw, 14px) clamp(12px, 2.4vw, 16px);
+  font-family: var(--font); font-size: clamp(14px, 3vw, 16px); outline: none; appearance: none;
+}
+input[type="number"]:focus, .select-wrap select:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.select-wrap{ position:relative; }
+.select-wrap::after{
+  content: "▾"; position:absolute; right: clamp(10px, 2.2vw, 14px); top: 50%;
+  transform: translateY(-50%); pointer-events:none; color: #fff;
+}
+.modal-actions{ margin-top: clamp(10px, 2vw, 16px); display:flex; justify-content:flex-end; gap:10px; }
+.hidden{ display:none; }
