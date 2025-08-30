@@ -1,6 +1,6 @@
 :root{
   --bg: #191919;
-  --card: transparent;         /* transparent so there's no inner box */
+
   --accent: #00357a;
   --water: #0081cc;
   --text: #ffffff;
@@ -9,7 +9,6 @@
   --control-border: #2f2f2f;
   --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  /* layout + sizing */
   --space: clamp(12px, 2.2vw, 24px);
   --radius: clamp(14px, 2vw, 20px);
   --btn-radius: clamp(12px, 1.8vw, 16px);
@@ -19,162 +18,95 @@
   --headline: clamp(22px, 5.3vw, 36px);
   --subtle: clamp(14px, 3.2vw, 18px);
 
-  /* keep buttons out of Notion's corner UI */
-  --edge-pad: 18px;               /* tweak if needed */
+  --edge-pad: 26px; /* push below Notion’s hover chrome */
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
+
+  --embed-radius: 22px;
 }
 
-*{ box-sizing: border-box; }
-html, body{ height:100%; }
-body{
-  margin:0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
+/* ---- CONTAINER-BASED SIZING (no vh/dvh) ---- */
+html, body { height: 100%; margin: 0; padding: 0; background: var(--bg) !important; color: var(--text); font-family: var(--font); }
 
-  /* make the embed fill its iframe nicely */
-  min-height: 100dvh;
+body{
+  height: 100%;
   display:flex;
   align-items:center;
   justify-content:center;
+  border-radius: var(--embed-radius);
+  /* allow scroll if content ever overflows instead of clipping at the top */
+  overflow: auto;
 }
 
-/* -------- LAYOUT -------- */
+/* main frame that Notion shows */
 .widget{
-  width: 100vw;                   /* full-bleed */
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
   display:flex;
+  align-items:center;
   justify-content:center;
+  background: var(--bg);
+  border-radius: var(--embed-radius);
+  overflow: hidden; /* clip rounded corners */
 }
-.card{
-  /* remove the inner box look completely */
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-}
+
+.card{ background: transparent; border-radius: 0; box-shadow: none; }
+
+/* app area follows the container height; padding stays inside (no clipping) */
 .tracker{
   width: 100%;
-  min-height: 100dvh;             /* fill the frame height */
+  height: 100%;
+  box-sizing: border-box;
   padding:
     calc(var(--edge-pad-top) + 8px)
     clamp(14px, 2.4vw, 24px)
     clamp(24px, 4vw, 48px);
   text-align:center;
   position: relative;
+
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:flex-start;
 }
 
-/* Typography */
-.headline{
-  font-weight: 700;
-  letter-spacing: .2px;
-  margin: clamp(6px, 1vw, 10px) 0 4px;
-  font-size: var(--headline);
-}
-.subtle{
-  margin: 0 0 clamp(8px, 1.2vw, 12px);
-  color: var(--muted);
-  font-weight: 500;
-  font-size: var(--subtle);
-}
+/* text */
+.headline{ font-weight:700; letter-spacing:.2px; margin: clamp(6px,1vw,10px) 0 4px; font-size: var(--headline); }
+.subtle{ margin: 0 0 clamp(8px,1.2vw,12px); color: var(--muted); font-weight:500; font-size: var(--subtle); }
 
-/* -------- ICON / BUTTONS -------- */
+/* buttons */
 .settings-btn{
-  position:absolute;
-  top: var(--edge-pad-top);
-  right: var(--edge-pad);
-  background: var(--control-bg);
-  border: 1px solid var(--control-border);
-  border-radius: var(--btn-radius);
-  padding: clamp(6px, 1vw, 8px);
-  cursor: pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition: transform .15s ease;
-  z-index: 5; /* stays above wave paths */
+  position:absolute; top: var(--edge-pad-top); right: var(--edge-pad);
+  background: var(--control-bg); border: 1px solid var(--control-border);
+  border-radius: var(--btn-radius); padding: clamp(6px,1vw,8px);
+  cursor:pointer; display:flex; align-items:center; justify-content:center; transition: transform .15s ease; z-index:5;
 }
 .settings-btn:hover{ transform: translateY(-1px); }
-.settings-btn img{ filter: none; width: clamp(16px, 2.2vw, 22px); height: auto; }
-
 .stats-btn{
-  position: absolute;
-  top: var(--edge-pad-top);
-  left: var(--edge-pad);
-  z-index: 5;
-  background: var(--control-bg);
-  border: 1px solid var(--control-border);
-  border-radius: 12px;
-  padding: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform .15s ease;
+  position:absolute; top: var(--edge-pad-top); left: var(--edge-pad); z-index:5;
+  background: var(--control-bg); border: 1px solid var(--control-border); border-radius:12px; padding:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: transform .15s ease;
 }
 .stats-btn:hover{ transform: translateY(-1px); }
-.stats-btn img{ filter: none; }
-
-.controls{
-  display:flex; justify-content:center;
-  gap: clamp(10px, 2vw, 16px);
-  margin-bottom: clamp(8px, 1.2vw, 12px);
-}
-.pill-btn{
-  background: var(--accent); color: #fff; border: 0; border-radius: var(--btn-radius);
-  padding: var(--btn-pad-y) var(--btn-pad-x); cursor: pointer; display:flex; align-items:center; justify-content:center;
-  font-weight: 600; min-width: var(--btn-size); min-height: var(--btn-size);
-  transition: transform .1s ease, filter .2s ease;
-}
+.controls{ display:flex; justify-content:center; gap: clamp(10px,2vw,16px); margin-bottom: clamp(8px,1.2vw,12px); }
+.pill-btn{ background: var(--accent); color:#fff; border:0; border-radius: var(--btn-radius); padding: var(--btn-pad-y) var(--btn-pad-x); cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:600; min-width: var(--btn-size); min-height: var(--btn-size); transition: transform .1s ease, filter .2s ease; }
 .pill-btn:hover{ filter: brightness(1.1); transform: translateY(-1px); }
-.pill-btn:active{ transform: translateY(0); }
-.pill-btn img{ filter: none; width: clamp(14px, 2vw, 18px); height:auto; }
-.primary{ background: var(--accent); }
 
-/* -------- DROPLET -------- */
-/* make the droplet a bit larger overall but still responsive */
-#droplet{
-  display:block;
-  width: min(72vmin, 88%);        /* larger than before */
-  max-width: 680px;
-  min-width: 160px;
-  margin: clamp(10px, 2vw, 16px) auto 0;
-}
+/* droplet scales with height or width (whichever is tighter) */
+#droplet{ display:block; width: clamp(160px, min(60vh, 88vw), 680px); margin: clamp(10px, 2vw, 16px) auto 0; }
 
-/* -------- WAVES -------- */
-/* JS handles bobbing; keep CSS neutral so there are no easing resets */
+/* waves (JS animates) */
 #wavesGroup { transform: none; }
 
-/* -------- MODAL -------- */
-.modal{
-  position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  background: rgba(0,0,0,.45); padding: var(--space); z-index: 50;
-}
+/* modals */
+.modal{ position: fixed; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,.45); padding: var(--space); z-index: 50; }
 .modal.hidden{ display:none; }
-.modal-inner{
-  width: min(520px, 86vw);
-  padding: calc(var(--space) * 1.2);
-  border-radius: var(--radius);
-  background: #1c1c1c;           /* keep modals readable on transparent page */
-}
+.modal-inner{ width: min(520px, 86vw); padding: calc(var(--space) * 1.2); border-radius: var(--radius); background: #1c1c1c; }
 .modal-header{ display:flex; align-items:center; justify-content:space-between; }
 .icon-btn{ background: transparent; border:0; color:#fff; font-size: clamp(18px, 3.6vw, 22px); cursor:pointer; }
-
 .field{ margin: clamp(10px, 2vw, 16px) 0; }
-.field label{
-  display:block; margin-bottom: clamp(6px, 1.2vw, 8px);
-  color: var(--muted); font-weight:600; font-size: clamp(13px, 2.8vw, 16px);
-}
-input[type="number"], .select-wrap select{
-  width:100%; background: var(--control-bg); color: #fff; border: 1px solid var(--control-border);
-  border-radius: 18px; padding: clamp(10px, 1.8vw, 14px) clamp(12px, 2.4vw, 16px);
-  font-family: var(--font); font-size: clamp(14px, 3vw, 16px); outline: none; appearance: none;
-}
-input[type="number"]:focus, .select-wrap select:focus{
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent);
-}
+.field label{ display:block; margin-bottom: clamp(6px, 1.2vw, 8px); color: var(--muted); font-weight:600; font-size: clamp(13px, 2.8vw, 16px); }
+input[type="number"], .select-wrap select{ width:100%; background: var(--control-bg); color:#fff; border:1px solid var(--control-border); border-radius:18px; padding: clamp(10px,1.8vw,14px) clamp(12px,2.4vw,16px); font-family: var(--font); font-size: clamp(14px,3vw,16px); outline:none; appearance:none; }
+input[type="number"]:focus, .select-wrap select:focus{ border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); }
 .select-wrap{ position:relative; }
-.select-wrap::after{
-  content: "▾"; position:absolute; right: clamp(10px, 2.2vw, 14px); top: 50%;
-  transform: translateY(-50%); pointer-events:none; color: #fff;
-}
+.select-wrap::after{ content:"▾"; position:absolute; right: clamp(10px, 2.2vw, 14px); top:50%; transform: translateY(-50%); pointer-events:none; color:#fff; }
 .modal-actions{ margin-top: clamp(10px, 2vw, 16px); display:flex; justify-content:flex-end; gap:10px; }
 .hidden{ display:none; }
