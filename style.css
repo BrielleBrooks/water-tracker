@@ -1,8 +1,9 @@
 :root{
-  /* Solid black background for the whole widget */
-  --bg: #191919;
+  /* Make the page transparent so it blends with Notion */
+  --bg: transparent;
 
-  /* UI colors */
+  /* UI colors stay the same */
+  --card: transparent;
   --accent: #00357a;
   --water: #0081cc;
   --text: #ffffff;
@@ -21,72 +22,57 @@
   --headline: clamp(22px, 5.3vw, 36px);
   --subtle: clamp(14px, 3.2vw, 18px);
 
-  /* keep corner buttons below Notion hover chrome */
+  /* keep buttons clear of Notion’s hover UI */
   --edge-pad: 18px;
   --edge-pad-top: calc(env(safe-area-inset-top, 0px) + var(--edge-pad));
 
-  /* Rounded corners for the whole visual area (inside the iframe) */
-  --embed-radius: 22px;
+  /* Rounded corners for the whole visual area inside the iframe */
+  --embed-radius: 22px; /* tweak this for more/less rounding */
 }
 
-/* === Base: use the CONTAINER height everywhere (no 100dvh) === */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background: var(--bg) !important;   /* solid black */
+/* ensure the page is actually transparent in every browser */
+html, body { height: 100%; background: transparent !important; }
+*{ box-sizing: border-box; }
+
+body{
+  margin:0;
   color: var(--text);
   font-family: var(--font);
-}
 
-/* Center the app within the iframe, and allow scroll if ever needed */
-body{
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* Fill the iframe and clip to rounded corners */
+  min-height: 100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-  /* Rounded corners INSIDE the iframe */
+  /* Rounded corners + clip the contents so the corners look truly rounded */
   border-radius: var(--embed-radius);
-  /* DO NOT lock overflow here anymore; allow auto so it never hard-clips */
-  overflow: auto;
+  overflow: hidden;           /* IMPORTANT: clips inside to the rounded shape */
 }
 
 /* -------- LAYOUT -------- */
 .widget{
-  width: 100%;
-  height: 100%;                 /* <-- critical: follow container height */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--bg);        /* same black, no seams */
-  /* If Notion shows your rounded corners, keep these; otherwise they just do no harm */
-  border-radius: var(--embed-radius);
-  overflow: hidden;             /* clip inner content to rounding */
+  width: 100vw;               /* full-bleed inside the frame */
+  max-width: 100%;
+  display:flex;
+  justify-content:center;
 }
 
-.card{
-  background: transparent;      /* no inner “box” */
+.card{                         /* no inner “box” */
+  background: transparent;
   border-radius: 0;
   box-shadow: none;
 }
 
 .tracker{
   width: 100%;
-  height: 100%;                 /* <-- critical: follow container height */
-  box-sizing: border-box;       /* padding stays inside the height */
+  min-height: 100dvh;
   padding:
     calc(var(--edge-pad-top) + 8px)
     clamp(14px, 2.4vw, 24px)
     clamp(24px, 4vw, 48px);
-  text-align: center;
+  text-align:center;
   position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* Let the content breathe vertically without forcing overflow */
-  justify-content: flex-start;
 }
 
 /* Typography */
@@ -118,6 +104,7 @@ body{
   z-index: 5;
 }
 .settings-btn:hover{ transform: translateY(-1px); }
+.settings-btn img{ filter: none; width: clamp(16px, 2.2vw, 22px); height: auto; }
 
 .stats-btn{
   position: absolute;
@@ -135,6 +122,7 @@ body{
   transition: transform .15s ease;
 }
 .stats-btn:hover{ transform: translateY(-1px); }
+.stats-btn img{ filter: none; }
 
 .controls{
   display:flex; justify-content:center;
@@ -149,19 +137,24 @@ body{
 }
 .pill-btn:hover{ filter: brightness(1.1); transform: translateY(-1px); }
 .pill-btn:active{ transform: translateY(0); }
+.pill-btn img{ filter: none; width: clamp(14px, 2vw, 18px); height:auto; }
+.primary{ background: var(--accent); }
 
 /* -------- DROPLET -------- */
-/* Scale with available HEIGHT or WIDTH, whichever is tighter */
+/* size stays responsive; adjust if you want larger/smaller */
 #droplet{
   display:block;
-  width: clamp(160px, min(60vh, 88vw), 680px);
+  width: min(72vmin, 88%);
+  max-width: 680px;
+  min-width: 160px;
   margin: clamp(10px, 2vw, 16px) auto 0;
 }
 
 /* -------- WAVES -------- */
-#wavesGroup { transform: none; }  /* JS handles bobbing */
+#wavesGroup { transform: none; } /* JS does the motion */
 
 /* -------- MODAL -------- */
+/* Modals need their own background because the page is transparent now */
 .modal{
   position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
   background: rgba(0,0,0,.45); padding: var(--space); z-index: 50;
@@ -171,7 +164,7 @@ body{
   width: min(520px, 86vw);
   padding: calc(var(--space) * 1.2);
   border-radius: var(--radius);
-  background: #1c1c1c;
+  background: #1c1c1c;    /* solid so it’s readable over any Notion page */
 }
 .modal-header{ display:flex; align-items:center; justify-content:space-between; }
 .icon-btn{ background: transparent; border:0; color:#fff; font-size: clamp(18px, 3.6vw, 22px); cursor:pointer; }
